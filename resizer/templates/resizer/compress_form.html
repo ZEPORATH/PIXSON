@@ -1,0 +1,34 @@
+{% extends "resizer/base.html" %}
+{% load static %}
+{% block title %} Compress Image {% endblock %}
+{% block content %}
+<div class="container">
+<header class="resize-pic">
+	<h1><b> Compress Your Pic</b></h1>
+	<p>
+	<!-- A bitton for uploading the image-->
+	<form action="{% url 'resizer:compress_op'  %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="media">
+            <div class="media-left media-middle">
+              <br>
+              <br>
+              <p>{{ form.non_field_errors }}</p>
+              <p>
+                  {{ form.imagem.errors }}
+                  {{ form.imagem }}
+              </p>
+
+            </p>
+                <input type="submit" value="Upload">
+
+            </form>
+            <br>
+            </div>
+            </div>
+
+</header>
+</div>
+
+
+{% endblock %}

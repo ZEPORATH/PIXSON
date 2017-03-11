@@ -1,0 +1,43 @@
+{% extends 'resizer/base.html' %}
+
+{% block title %} Home-Upload Image {% endblock %}
+
+{% block content %}
+ <div class="container">
+<header class="resize-pic">
+    <p><h4>Welocome to demonstration of Opencv and PIL based Image operations.<br>
+    This is an attempt to show usage of Opencv on web based Framework.
+    </h4>
+    </p>
+    <hr>
+    <p>
+        <h6>You can start by directly uploading a pic on this page , <br>
+        or make use of navigation bar
+    </h6>
+    </p>
+	<h1><b> Resize Your Pic</b></h1>
+	<p>
+	<!-- A bitton for uploading the image-->
+	<form action="{% url 'resizer:resizer_op'  %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="media">
+            <div class="media-left media-middle">
+              <br>
+              <br>
+              <p>{{ form.non_field_errors }}</p>
+              <p>
+                  {{ form.imagem.errors }}
+                  {{ form.imagem }}
+              </p>
+
+            </p>
+                <input type="submit" value="Upload">
+
+            </form>
+            <br>
+            </div>
+            </div>
+
+</header>
+</div>
+{% endblock %}

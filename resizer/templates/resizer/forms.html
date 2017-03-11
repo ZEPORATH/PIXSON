@@ -1,0 +1,73 @@
+{% extends "resizer/base.html" %}
+{% load static %}
+{% block title %} Resize Image {% endblock %}
+{% block content %}
+<div class="container">
+<header class="resize-pic">
+	<h1><b> Resize Your Pic</b></h1>
+	<p>
+	<!-- A bitton for uploading the image-->
+	<form action="{% url 'resizer:resizer_op'  %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="media">
+            <div class="media-left media-middle">
+              <br>
+              <br>
+              <p>{{ form.non_field_errors }}</p>
+              <p>
+                  {{ form.imagem.errors }}
+                  {{ form.imagem }}
+              </p>
+
+            </p>
+                <input type="submit" value="Upload">
+
+            </form>
+            <br>
+            </div>
+            </div>
+
+</header>
+</div>
+{% if data %}
+<div class="image_op_resize">
+<h3><b> Enter Parameters for Resizing</b></h3>
+    <div class="Original_img">
+        <img style="width: 200px; height: 100 px" src="{% static 'documents/temp_img.jpg' %}" alt="Error Processing"/>
+        <form action="{% url 'resizer:resize_op_fetch_param' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <br>Height(in px):
+            <input name="height" type="text" />
+
+            <br>
+            Width(in px):
+            <input name="width" type="text" />
+
+            <br>
+            Select Method:
+            <select name="resize_method" >
+                <option value = "cv2.INTER_NEAREST">INTER_NEAREST</option>
+                <option value = "cv2.INTER_LINEAR">INTER_LINEAR</option>
+                <option value = "cv2.INTER_AREA">INTER_AREA</option>
+                <option value = "cv2.INTER_LANCZOS4">INTER_LANCZOS4</option>
+                <option value = "cv2.INTER_CUBIC">Auto</option>
+            </select>
+            <br>
+            <input type="submit" value="OK"/>
+        </form>
+
+    </div>
+        {% if processed %}
+    <div class="Negative_image">
+        The resized image:<br>
+
+        <img style="width: 200px; height: 100 px" src="{% static 'documents/resized_img.jpg' %}" alt="Error Processing"/>
+        <p>Just right click and save the image.<br>
+        Enjoy!!<br>
+    </div>
+    {% endif %}
+</div>
+<hr>
+{% endif %}
+{% endblock %}
