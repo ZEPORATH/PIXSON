@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import os
+from PIL import Image as Im
+
 
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import  Document,Opencv, Opencv2
@@ -75,6 +77,7 @@ def compress_op_fetch_img(request):
     if form.is_valid():
         obj = Opencv(imagem=request.FILES['imagem'])
         obj.save()
+        global image_path
         image_path = get_Image_path(obj)
         data = True
 
@@ -86,6 +89,21 @@ def compress_op_fetch_img(request):
 
 
 def compress_op_fetch_param(request):
+    size = request.POST.get('size')
+    print size
+    s = int(size)
+    global img_path
+    print img_path
+    compressed_img = wk.CompressorController(img_path,s)
+
+    data = True
+    processed = True
+    return render(request, 'resizer/compress_form.html', {'data': data, 'processed': processed})
+
+def enhance_op_fetch_img(request):
+    pass
+
+def enhance_op_fetch_param(request):
     pass
 
 

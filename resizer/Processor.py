@@ -37,58 +37,46 @@ class worker:
             self.resized = cv2.resize(image, (W, H), interpolation=cv2.INTER_CUBIC)
         return self.resized
 
-    def setCompressor(self, path, size):
+    def setCompressor(self,path, size):
         fileinfo = os.stat(path)
         orig_size = fileinfo.st_size
         res_size = orig_size
         quality1 = 100
         res_path = path
         image = cv2.imread(path, -1)
+
+        print size, orig_size
         if orig_size < size:
-            return image
+            return path
         else:
+            print path
             im = Im.open(path)
             while (res_size >= size and quality1 >= 0):
                 quality1 -= 5
                 im.save('res_compress_img.jpg', quality=quality1, optimise=True)
+                im.save('resizer/static/documents/compressed_img.jpg', quality=1, optimise=True)
                 res_size = os.stat('res_compress_img.jpg').st_size
-            image = cv2.imread('res_compress_img.jpg', -1)
-            return image
-
-            '''
-            This code segment is bit buggy, and will be paid attention in later imporovents
-
-
-            i = 0
-            while res_size >= size:
-
-                im = Im.open(res_path)
-                while (res_size>=size and quality1 >= 0):
-                    quality1 -= 5
-                    print "inside while" , i
-                    im.save('res_compress_img.jpg',quality = quality1, optimise = True)
-                    res_size = os.stat('res_compress_img.jpg').st_size
-                print quality1
-                #im.save('res_compress_img.jpg',quality = quality1, optimise = True)
+            im.close()
+            if res_size >= size:
                 quality1 = 100
-                #im.save('res_compress_img.jpg',quality = quality1, optimise = True)
-                res_size = os.stat('res_compress_img.jpg').st_size
-                res_path = 'res_compress_img.jpg'
-                i += 1
-        image = cv2.imread('res_compress_img.jpg',-1)
-        return image
+                im = Im.open('res_compress_img.jpg')
+                im.save('res_compress_img1.jpg', quality=1, optimise=True)
+                im.save('resizer/static/documents/compressed_img.jpg', quality=1, optimise=True)
+                im.close()
+            # im = Im.open('res_compress_img1.jpg')
+            # im.save('resizer/static/documents/compressed_img.jpg')
+            return 'res_compress_img1.jpg'
 
-
-
-            im = Im.open(path)
-            while(res_size > size and quality>=0):
-                quality -= 10
-                cv2.imwrite('res_compress_img.jpg', image,[int(cv2.IMWRITE_PNG_COMPRESSION),9])
-                res_size = os.stat('res_compress_img.jpg').st_size
-        res = cv2.imread('res_compress_img.jpg',-1)
-        return res
-    '''
-
+    def CompressorController(self,path, size):
+        size = size * 1024
+        fileinfo = os.stat(path)
+        orig_size = fileinfo.st_size
+        while (orig_size > size):
+            path_new = self.setCompressor(path, size)
+            print "hello"
+            orig_size = os.stat(path_new).st_size
+            path = path_new
+        return path
     def fileInfo(self, path):
         # Returns a list of strings with basic file info
         name = os.path.basename(path)

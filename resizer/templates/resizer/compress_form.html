@@ -29,6 +29,32 @@
 
 </header>
 </div>
+{% if data %}
+<div class="image_op_resize">
+<h3><b> Enter Parameters for Resizing</b></h3>
+    <div class="Original_img">
+        <img style="width: 200px; height: 100 px" src="{% static 'documents/temp_img.jpg' %}" alt="Error Processing"/>
+        <form action="{% url 'resizer:compress_op_fetch_param' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
 
+            <br>Size(in KB):
+            <input name="size" type="text" />
+
+            <input type="submit" value="OK"/>
+        </form>
+    <p><h4>The backend compression code is bit buggy ,<br> kindly ignore using it for now.<hr></h4></p>
+    </div>
+        {% if processed %}
+    <div class="Compressed_image">
+        The compressed image:<br>
+
+        <img style="width: 200px; height: 100 px" src="{% static 'documents/compressed_img.jpg' %}" alt="Error Processing"/>
+        <p>Just right click and save the image.<br>
+        Enjoy!!<br>
+    </div>
+    {% endif %}
+</div>
+<hr>
+{% endif %}
 
 {% endblock %}

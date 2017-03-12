@@ -2,6 +2,7 @@ from django.forms import forms
 from django.forms import ModelForm
 from .models import Opencv, Opencv2
 
+
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
         label='Select a file'
