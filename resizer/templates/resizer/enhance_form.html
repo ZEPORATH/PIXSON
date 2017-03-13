@@ -1,0 +1,130 @@
+{% extends "resizer/base.html" %}
+{% load static %}
+{% block title %} Enhance Image {% endblock %}
+{% block content %}
+<div class="container">
+<header class="resize-pic">
+	<h1><b> Enhance Your Pic</b></h1>
+    <p>
+    <h3> Brighten, sharpen, and set-contrast for the image</h3>
+    </p>
+	<p>
+	<!-- A bitton for uploading the image-->
+	<form action="{% url 'resizer:enhance_op'  %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="media">
+            <div class="media-left media-middle">
+              <br>
+              <br>
+              <p>{{ form.non_field_errors }}</p>
+              <p>
+                  {{ form.imagem.errors }}
+                  {{ form.imagem }}
+              </p>
+
+            </p>
+                <input type="submit" value="Upload">
+
+            </form>
+            <br>
+            </div>
+            </div>
+
+</header>
+</div>
+{% if data %}
+<div class="image_op_enhance">
+<h3><b> <u>Enter Parameters for Enhancing Your Image</u></b></h3>
+
+    <div class="Original_img">
+        <img style="width: 480px; height: 360px" src="{% static 'documents/temp_img.jpg' %}" alt="Error Processing"/>
+        <form action="{% url 'resizer:enhance_op_fetch_param' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <p> <h5><u><strong>Brightness:</strong></u></h5>
+            <input name = "Brightness" id="Brightness" type="range" min="0" max="300" value="0" step="5"
+                   onchange="showValue(this.value)" style="-webkit-appearance: none;
+            padding-left:2px; padding-right:2px;
+            width:200px;
+            -webkit-border-radius: 5px;
+            background-image: -webkit-linear-gradient(top, #000000, #333333, #000000);" />
+               <span id="range">0</span>
+                <input type="checkbox" name="gamma" id="gamma" value="1" onchange="changeRange()"/> Gamma
+                <br>
+                <h5><u><strong>Sharpness: </h5></strong></u>
+            <input name = "Sharpeness" type="range" min="0" max="100" value="0" step="5"
+                   onchange="showValue1(this.value)" style="-webkit-appearance: none;
+            padding-left:2px; padding-right:2px;
+            width:200px;
+            -webkit-border-radius: 5px;
+            background-image: -webkit-linear-gradient(top, #000000, #333333, #000000);" />
+                <span id="range1">0</span>
+                Select Method:
+                <select name="sharpen_method" >
+                    <option value = "1">simple_sharpening</option>
+                    <option value = "2">excessive_sharpening</option>
+                    <option value = "3">Edge_sharpening</option>
+                    <option value = "4">Gaussian Unsgarp Masking</option>
+            </select>
+                <br>
+                <h5><u><strong>Contrast: </h5></strong></u>
+            <input name = "Contrast" type="range" min="0" max="100" value="0" step="5"
+                   onchange="showValue2(this.value)" style="-webkit-appearance: none;
+            padding-left:2px; padding-right:2px;
+            width:200px;
+            -webkit-border-radius: 5px;
+            background-image: -webkit-linear-gradient(top, #000000, #333333, #000000);" />
+            <span id="range2">0</span>
+                <input type="checkbox" name="EqualizeHist" value="1"> Equalize Histogram
+
+                <br>
+            </p>
+            <input type="submit" value="OK"/>
+
+            </form>
+    </div>
+</div>
+ {% if processed %}
+    <div class="enhanced_image">
+        The compressed image:<br>
+
+        <img style="width: 480px; height: 360px" src="{% static 'documents/enhanced_img.jpg' %}" alt="Error Processing"/>
+        <p>Just right click and save the image.<br>
+        Enjoy!!<br>
+    </div>
+    {% endif %}
+</div>
+<hr>
+{% endif %}
+<script type="text/javascript">
+            function changeRange()
+            {
+                if(document.getElementById("gamma").checked==true)
+                {
+                    document.getElementById("Brightness").min=0;
+                    document.getElementById("Brightness").step=0.5;
+                    document.getElementById("Brightness").max=3.5;
+                     document.getElementById("Brightness").value=0;
+                }
+                else
+                {
+                    document.getElementById("Brightness").min=0;
+                     document.getElementById("Brightness").step=10;
+                    document.getElementById("Brightness").max=300;
+                     document.getElementById("Brightness").value=0;
+                }
+                showValue(0);
+            }
+            function showValue(newValue)
+            {
+                document.getElementById("range").innerHTML=newValue;
+            }
+            function showValue1(newValue)
+            {
+                document.getElementById("range1").innerHTML=newValue;
+            }
+            function showValue2(newValue)
+            {
+                document.getElementById("range2").innerHTML=newValue;
+            }
+            </script>
+{% endblock %}
