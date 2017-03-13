@@ -40,8 +40,8 @@ def resizer_op(request):
     return resizer_op_fetch_img(request)
 def compress_op(request):
     return compress_op_fetch_img(request)
-def enhance_op(reqest):
-    pass
+def enhance_op(request):
+    return enhance_op_fetch_img(request)
 
 
 def resizer_op_fetch_img(request):
@@ -101,11 +101,61 @@ def compress_op_fetch_param(request):
     return render(request, 'resizer/compress_form.html', {'data': data, 'processed': processed})
 
 def enhance_op_fetch_img(request):
-    pass
+    form = FormOpencv(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        obj = Opencv(imagem=request.FILES['imagem'])
+        obj.save()
+        image_path = get_Image_path(obj)
+        data = True
+
+        return render(request, 'resizer/enhance_form.html', {'form': form, 'data': data})
+    else:
+        form = FormOpencv()
+    return render(request, 'resizer/enhance_form.html', {'form': form})
+
 
 def enhance_op_fetch_param(request):
-    pass
+    Brightness = request.POST.get('Brightness')
+    gamma = request.POST.get('gamma')
+    Sharpeness = request.POST.get('Sharpeness')
+    sharpen_method = request.POST.get('sharpen_method')
+    Contrast = request.POST.get('Contrast')
+    EqualizeHist  = request.POST.get('EqualizeHist')
+    print Brightness,gamma,sharpen_method,Sharpeness,Contrast,EqualizeHist
+    if os.path.isfile('resizer/static/documents/enhanced_img.jpg'):
+        try:
+            os.remove('resizer/static/documents/enhanced_img.jpg')
+            print "Successfully Deleted"
+        except OSError:
+            pass
+    global img_path
+    path_res = img_path
+    b = float(Brightness)
+    if b <= 0 :
+        if gamma==1:g=True
+        else: g = False
+        brighten_img = wk.setBrightness(img_path,b,g,True)
+        path_res = 'resizer/static/documents/enhanced_img.jpg'
+        cv2.imwrite(path_res,brighten_img)
 
+    s = int(Sharpeness)
+    if s<=0:
+        s_m = int(sharpen_method)
+        sharpen_img = wk.setSharpen(path_res,s,s_m)
+        path_res = 'resizer/static/documents/enhanced_img.jpg'
+        cv2.imwrite(path_res, sharpen_img)
+
+    c = int(Contrast)
+    if c<=0:
+        print "In contrast"
+        if EqualizeHist==1:e_h=True
+        else:e_h=False
+        contrast_img = wk.setContrast(path_res,c,e_h,True)
+        path_res = 'resizer/static/documents/enhanced_img.jpg'
+        cv2.imwrite(path_res, contrast_img)
+    data = True
+    processed = True
+    return render(request, 'resizer/enhance_form.html', {'data': data, 'processed': processed})
 
 def get_Image_path(obj):
     img_db = obj.imagem
@@ -118,6 +168,7 @@ def get_Image_path(obj):
     if os.path.isfile('resizer/static/documents/temp_img.jpg'):
         try:
             os.remove('resizer/static/documents/temp_img.jpg')
+            print "Successfully Deleted"
         except OSError:
             pass
 
