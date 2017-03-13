@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^resize_op_fetch_param/$', views.resize_op_fetch_param, name='resize_op_fetch_param'),
     url(r'^compress_op/$',views.compress_op,name='compress_op'),
     url(r'^compress_op_fetch_param/$',views.compress_op_fetch_param,name='compress_op_fetch_param'),
-
+    url(r'^enhance_op/$',views.enhance_op,name='enhance_op'),
+    url(r'^enhance_op_fetch_param/$', views.enhance_op_fetch_param, name='enhance_op_fetch_param'),
 
 ]
