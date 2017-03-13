@@ -4,7 +4,7 @@
 <title>Opencv - django </title>
 <meta name="description" content="Django framework to integrate Opencv on web api">
 <meta name="robots" content="index,follow">
-<meta name="keywords" content="Django-opencv, Django1.10 , opencv web-app, python opencv webapp, pic-resize webapp opencv,
+<meta name="keywords" content="Django-opencv, Django1.10 , ImageProcessing, webapp-opencv, django1.10, Opencv, Python,opencv web-app, python opencv webapp, pic-resize webapp opencv,
 github opencv webapp">
 </head>
 <div>
@@ -18,3 +18,4 @@ Compress - A bit buggy,try not using it.
 
 <p>
 </div>
+<br><strong>TAGS: ImageProcessing, webapp-opencv, django1.10, Opencv, Python</strong>
